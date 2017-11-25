@@ -1,4 +1,4 @@
-# ChatWorkありがとうボタン( Button)
+# ChatWorkありがとうボタン(ChatWork Thanks Button)
 
 ChatWorkにありがとうボタンをつけるChrome拡張です。
 
