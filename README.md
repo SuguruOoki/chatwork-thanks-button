@@ -1,5 +1,4 @@
-# Slack 返信引用ボタン(Slack Reply and Quote Button)
-![アイコン](img/icon128.png)
+# ChatWorkありがとうボタン( Button)
 
 ChatWorkにありがとうボタンをつけるChrome拡張です。
 
