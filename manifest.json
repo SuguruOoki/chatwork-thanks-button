@@ -3,13 +3,10 @@
   "name": "ChatWork ありがとうボタン(ChatWork Thanks Button)",
   "short_name": "ChatWork ありがとうボタン",
   "description": "ChatWork にthank youボタンをつけます。Add a thanks button to ChatWork.",
-  "version" : "1.00",
+  "version" : "1.01",
   "icons": {
-    "16": "img/icon16.png",
-    "48": "img/icon48.png",
-    "128": "img/icon128.png"
   },
-  "homepage_url": "http://gam0022.net/works/slack-reply-and-quote-button/",
+  "homepage_url": "https://github.com/SuguruOoki/chatwork-thanks-button",
   "content_scripts":[
     {
       "matches" : [ "https://kcw.kddi.ne.jp/*"],
