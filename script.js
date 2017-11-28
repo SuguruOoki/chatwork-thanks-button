@@ -35,6 +35,6 @@ thanksbutton.onclick = function() {
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
     var url = '';
     var targetMessage=sendText.match(/\[To:(.[0-9]+)\]/)[1];
-    thanksPostData = {'senderId':senderId, 'senderText':sendText};
+    thanksPostData = {'senderId':senderId, 'senderText':sendText, 'To':targetMessage};
     execPost(url,thanksPostData);
  };
