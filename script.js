@@ -34,6 +34,7 @@ thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
     var url = '';
+    var targetMessage=sendText.match(/\[To:(.[0-9]+)\]/)[1];
     thanksPostData = {'senderId':senderId, 'senderText':sendText};
     execPost(url,thanksPostData);
  };
