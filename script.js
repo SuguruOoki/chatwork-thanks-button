@@ -1,19 +1,13 @@
-var insertClass = document.getElementById('_chatSendToolbar');
-var div = document.createElement('span');
-div.classList.add("chatInput__submit");
-div.classList.add("_cwBN button");
-div.textContent = 'ありがとう';
-document.body.insertBefore(div, insertClass.firstChild);
-
+var insertClass = document.getElementById('_sendButton');
 // divタグを作成して変数に代入する
-var thanksbutton = document.createElement("div");
-thanksbutton.setAttribute("class", "chatInput__submit _cwBN button");
+var thanksbutton = document.createElement("span");
+thanksbutton.className = "chatInput__submit _cwBN button" ;
 thanksbutton.setAttribute("id", "_thanks-send");
 thanksbutton.setAttribute("role","button");
-thanksbutton.innerHTML = "Thanks!";
-document.body.insertBefore(thanksbutton, insertClass.firstChild);
+thanksbutton.innerHTML = "ありがとう!";
+insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.firstChild); //親クラス 入れる要素 基準となるタグ
 
-thanksbutton.onclick = function() { alert("I was clicked!"); };
-thanksbutton.onclick();
-//var thanksbutton = '<div id="_thanks-send" class="chatInput__submit _cwBN button" role="button" tabindex="2" aria-disabled="false">ありがとう</div>';
-
+thanksbutton.onclick = function() {
+    var sendText = document.getElementById('_chatText').value;
+    alert(sendText);
+ };
