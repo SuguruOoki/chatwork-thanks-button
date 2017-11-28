@@ -13,7 +13,7 @@ thanksbutton.setAttribute("role","button");
 thanksbutton.innerHTML = "Thanks!";
 document.body.insertBefore(thanksbutton, insertClass.firstChild);
 
-//var thanks_object = document.getElementById('_thanks-send');
 thanksbutton.onclick = function() { alert("I was clicked!"); };
 thanksbutton.onclick();
+//var thanksbutton = '<div id="_thanks-send" class="chatInput__submit _cwBN button" role="button" tabindex="2" aria-disabled="false">ありがとう</div>';
 
