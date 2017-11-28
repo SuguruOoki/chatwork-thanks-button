@@ -1,15 +1,39 @@
-var insertClass = document.getElementsByClassName('chatInput__submitContainer');
-var thanksbutton = '<div id="_thanks-send" class="chatInput__submit _cwBN button" role="button" tabindex="2" aria-disabled="false">Thanks!</div>';
-
-// divタグを作成して変数に代入する
-var thanksbutton = document.createElement("div");
-thanksbutton.setAttribute("class", "chatInput__submit _cwBN button");
+var insertClass = document.getElementById('_sendButton');
+var thanksbutton = document.createElement("span");
+thanksbutton.className = "chatInput__submit _cwBN button" ;
 thanksbutton.setAttribute("id", "_thanks-send");
 thanksbutton.setAttribute("role","button");
-thanksbutton.innerHTML = "Thanks!";
-document.body.insertBefore(thanksbutton, insertClass.firstChild);
+thanksbutton.innerHTML = "ありがとう!";
+insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.firstChild);
 
-//var thanks_object = document.getElementById('_thanks-send');
-thanksbutton.onclick = function() { alert("I was clicked!"); };
-thanksbutton.onclick();
+/**
+ * データをPOSTする
+ * @param String アクション
+ * @param Object POSTデータ連想配列
+ */
+function execPost(action, data) {
+ var form = document.createElement("form");
+ form.setAttribute("action", action);
+ form.setAttribute("method", "post");
+ form.style.display = "none";
+ document.body.appendChild(form);
+ // パラメタの設定
+ if (data !== undefined) {
+  for (var paramName in data) {
+   var input = document.createElement('input');
+   input.setAttribute('type', 'hidden');
+   input.setAttribute('name', paramName);
+   input.setAttribute('value', data[paramName]);
+   form.appendChild(input);
+  }
+ }
+ form.submit();
+}
 
+thanksbutton.onclick = function() {
+    var sendText = document.getElementById('_chatText').value;
+    var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
+    var url = '';
+    thanksPostData = {'senderId':senderId, 'senderText':sendText};
+    execPost(url,thanksPostData);
+ };
