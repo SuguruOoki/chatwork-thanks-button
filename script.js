@@ -32,9 +32,15 @@ function execPost(action, data) {
 
 thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
+    if (sendText === '') {
+        sendText = 'Thank you!';
+    }
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
     var url = '';
-    var targetMessage=sendText.match(/\[To:(.[0-9]+)\]/)[1];
+    var targetMessage = '';
+    if (sendText.match(/\[To:(.[0-9]+)\]/) !== null) {
+        targetMessage = sendText.match(/\[To:(.[0-9]+)\]/)[1];
+    }
     thanksPostData = {'senderId':senderId, 'senderText':sendText, 'To':targetMessage};
     execPost(url,thanksPostData);
  };
