@@ -17,6 +17,7 @@ function execPost(action, data) {
  form.setAttribute("method", "post");
  form.style.display = "none";
  document.body.appendChild(form);
+ 
  // パラメタの設定
  if (data !== undefined) {
   for (var paramName in data) {
@@ -32,15 +33,20 @@ function execPost(action, data) {
 
 thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
-    if (sendText === '') {
-        sendText = 'Thank you!';
-    }
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
     var url = '';
     var targetMessage = '';
+
     if (sendText.match(/\[To:(.[0-9]+)\]/) !== null) {
-        targetMessage = sendText.match(/\[To:(.[0-9]+)\]/)[1];
+        target = sendText.match(/\[To:(.[0-9]+)\]/)[1];
+        console.log('test');
+        sendText = sendText.match(/\[To:.+]さん\n(.+)?/s)[1];
     }
-    thanksPostData = {'senderId':senderId, 'senderText':sendText, 'To':targetMessage};
+
+    if (sendText === '↵') {
+        sendText = '';
+    }
+
+    thanksPostData = {'from_chatwork_id:':senderId, 'to_chatwork_id':target, 'message':sendText};
     execPost(url,thanksPostData);
  };
