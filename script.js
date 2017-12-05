@@ -18,7 +18,6 @@ var req = new XMLHttpRequest();
 
 
 thanksbutton.onclick = function() {
-    thanksbutton.disabled = true;
     var sendText = document.getElementById('_chatText').value;
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
     var url = 'http://127.0.0.1:3000/thanks/new';
