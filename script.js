@@ -1,11 +1,18 @@
 var insertClass = document.getElementById('_sendButton');
-var thanksbutton = document.createElement("span");
-thanksbutton.className = "chatInput__submit _cwBN button" ;
+var thanksbutton = document.createElement("div");
+var req = new XMLHttpRequest();
+
+// 要素についての指定
+thanksbutton.className = "chatInput__submit button" ;
 thanksbutton.setAttribute("id", "_thanks-send");
 thanksbutton.setAttribute("role","button");
+
+// style
+thanksbutton.style.marginLeft="3px";
+thanksbutton.style.borderColor="#5cb85c";
+thanksbutton.style.background="#5cb85c";
 thanksbutton.innerHTML = "ありがとう!";
-insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.firstChild);
-var req = new XMLHttpRequest();
+insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.lastChild);
 
 /*
 ・TOの名前にニックネームが設定されていたら、正常に動作しない
@@ -15,7 +22,6 @@ var req = new XMLHttpRequest();
 ・返信もTOとして扱うようにする
 ・TOが複数あった場合に、本文に2つ目以降のTOの文字列が含まれる
  */
-
 
 thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
