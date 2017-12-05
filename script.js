@@ -14,14 +14,7 @@ thanksbutton.style.background="#5cb85c";
 thanksbutton.innerHTML = "ありがとう!";
 insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.lastChild);
 
-/*
-・TOの名前にニックネームが設定されていたら、正常に動作しない
-・「ありがとう！」のUIを「送信」の隣に置いて背景色を緑色などに変更しておく
-======================== ↑ 優先度 高
-・サーバーからエラーレスポンスが返ってきたら、管理者（柳）にご連絡くださいとアラートを表示する
-・返信もTOとして扱うようにする
-・TOが複数あった場合に、本文に2つ目以降のTOの文字列が含まれる
- */
+// TODO サーバーからエラーレスポンスが返ってきたら、管理者（柳）にご連絡くださいとアラートを表示する
 
 thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
@@ -33,9 +26,16 @@ thanksbutton.onclick = function() {
     var response_target = '';
     var target = '';
 
+    if (sendText === '') {
+        alert('誰にありがとうを伝えたいですか？');
+        exit();
+    }
+
     // 送信先(To:)のユーザIDを取得
-    if (sendText.match(/\[To:(.[0-9]+)\]/) !== null) {
-        to_target = sendText.match(/\To:([0-9]+)/sg)[1];
+    to_target = sendText.match(/\To:([0-9]+)/sg);
+    console.log(to_target);
+    if (to_target !== null && to_target !== '') {
+        console.log('to_target');
         to_target =  to_target.slice(3);
         // for (var ii = 0; ii < target.length; ii++) {
         //     to_target[ii] = to_target[ii].slice(3);
@@ -49,8 +49,9 @@ thanksbutton.onclick = function() {
         target = to_target;
     } else {
         // 送信先(返信)を取得
-        if (sendText.match(/\[返信 aid\=(.[0-9]+) /sg) !== null) {
-            response_target = sendText.match(/\[返信 aid\=(.[0-9]+) /sg)[1];
+        response_target = sendText.match(/\[返信 aid\=(.[0-9]+) /sg);
+        console.log(response_target);
+        if (response_target !== null && response_target !== '') {
             response_target = response_target.slice(8);
             // for (var jj = 0; jj < response_target.length; jj++) {
             //     response_target[jj] = response_target[jj].slice(8);
@@ -65,9 +66,18 @@ thanksbutton.onclick = function() {
     }
 
     thanksPostData = 'from_chatwork_id='+senderId+'&to_chatwork_id='+target+'&message='+sendText;
-    // req.open(method, url, true);
-    // req.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-    // req.send(thanksPostData);
-    // req.abort();
-    // document.getElementById('_chatText').value="";
+    req.open(method, url, true);
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    req.addEventListener('loadend', function() {
+      if (req.status === 200) {
+        console.log(req.response);
+      } else {
+        // console.error(req.status+' '+req.statusText);
+        alert("エラーが発生しました。管理者（柳）にご連絡ください。");
+      }
+    });
+    req.send(thanksPostData);
+    req.abort();
+    document.getElementById('_chatText').value="";
  };
