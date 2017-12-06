@@ -19,8 +19,10 @@ insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.lastChi
 thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
-    var url = 'http://127.0.0.1:3000/thanks/new';
+    var url = 'http://127.0.0.1:12390/thanks/new';
     var method = 'POST';
+
+    // TODO: 複数送信時にはこの辺りの初期化を変更する
     var targetMessage = '';
     var to_target = '';
     var response_target = '';
@@ -32,15 +34,15 @@ thanksbutton.onclick = function() {
     }
 
     // 送信先(To:)のユーザIDを取得
-    to_target = sendText.match(/\To:([0-9]+)/sg);
-    console.log(to_target);
-    if (to_target !== null && to_target !== '') {
-        console.log('to_target');
+    // 現在は一つ目のみを検出
+    // TODO: 複数送信時の対応が必要
+    if (sendText.match(/\To:([0-9]+)/s) !== null && sendText.match(/\To:([0-9]+)/s) !== '') {
+        to_target = sendText.match(/\To:([0-9]+)/s);
+        to_target = to_target[0];
         to_target =  to_target.slice(3);
         // for (var ii = 0; ii < target.length; ii++) {
         //     to_target[ii] = to_target[ii].slice(3);
         // }
-
     }
 
     // var target = to_target.concat(response_target).unique();
@@ -49,9 +51,8 @@ thanksbutton.onclick = function() {
         target = to_target;
     } else {
         // 送信先(返信)を取得
-        response_target = sendText.match(/\[返信 aid\=(.[0-9]+) /sg);
-        console.log(response_target);
-        if (response_target !== null && response_target !== '') {
+        if (sendText.match(/\[返信 aid\=(.[0-9]+) /s) !== null && sendText.match(/\[返信 aid\=(.[0-9]+) /s) !== '') {
+            response_target = sendText.match(/\[返信 aid\=(.[0-9]+) /s);
             response_target = response_target.slice(8);
             // for (var jj = 0; jj < response_target.length; jj++) {
             //     response_target[jj] = response_target[jj].slice(8);
@@ -60,7 +61,8 @@ thanksbutton.onclick = function() {
         target = response_target;
     }
 
-    sendText = sendText.match(/\[To:.+](.*)さん(.+)?/s);
+    // TODO: 複数でのToや返信の送信時の対応が必要
+    sendText = sendText.match(/\さん(.+)?/s)[1];
     if (sendText === '↵') {
         sendText = '';
     }
@@ -69,14 +71,18 @@ thanksbutton.onclick = function() {
     req.open(method, url, true);
     req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    req.addEventListener('loadend', function() {
-      if (req.status === 200) {
-        console.log(req.response);
-      } else {
-        // console.error(req.status+' '+req.statusText);
-        alert("エラーが発生しました。管理者（柳）にご連絡ください。");
-      }
-    });
+    // TODO: この辺りはサーバーのレスポンスによって対応を変える時の処理。2017/12/06 現在はまだ未完成。
+    // req.addEventListener('loadend', function() {
+    //   console.log(req.status);
+    //   console.log(req.statusText);
+    //   if (req.status === 200) {
+    //     console.log(req.response);
+    //   } else {
+    //     // console.error(req.status+' '+req.statusText);
+    //     alert("エラーが発生しました。管理者（柳）にご連絡ください。");
+    //   }
+    // });
+
     req.send(thanksPostData);
     req.abort();
     document.getElementById('_chatText').value="";
