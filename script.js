@@ -29,7 +29,7 @@ thanksbutton.onclick = function() {
     var target = '';
 
     if (sendText === '') {
-        alert('誰にありがとうを伝えたいですか？');
+        alert('何かしら入力をお願いします・・・(ツラミ)');
         exit();
     }
 
@@ -49,20 +49,24 @@ thanksbutton.onclick = function() {
     // To と 返信 どちらもあるときはToを優先
     if (to_target !== '') {
         target = to_target;
-    } else {
+    }
+    else if (sendText.match(/\[返信 aid\=(.[0-9]+) /s) !== null && sendText.match(/\[返信 aid\=(.[0-9]+) /s) !== '') {
         // 送信先(返信)を取得
-        if (sendText.match(/\[返信 aid\=(.[0-9]+) /s) !== null && sendText.match(/\[返信 aid\=(.[0-9]+) /s) !== '') {
-            response_target = sendText.match(/\[返信 aid\=(.[0-9]+) /s);
-            response_target = response_target.slice(8);
-            // for (var jj = 0; jj < response_target.length; jj++) {
-            //     response_target[jj] = response_target[jj].slice(8);
-            // }
-        }
+        response_target = sendText.match(/\[返信 aid\=(.[0-9]+) /s)[1];
         target = response_target;
+        // for (var jj = 0; jj < response_target.length; jj++) {
+        //     response_target[jj] = response_target[jj].slice(8);
+        // }
+    } else {
+        alert('誰にありがとうを伝えたいですか？');
+        exit();
     }
 
     // TODO: 複数でのToや返信の送信時の対応が必要
-    sendText = sendText.match(/\さん(.+)?/s)[1];
+    if (sendText.match(/\さん(.+)?/s) !== null) {
+        sendText = sendText.match(/\さん(.+)?/s)[1];
+    }
+
     if (sendText === '↵') {
         sendText = '';
     }
@@ -72,18 +76,14 @@ thanksbutton.onclick = function() {
     req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     // TODO: この辺りはサーバーのレスポンスによって対応を変える時の処理。2017/12/06 現在はまだ未完成。
-    // req.addEventListener('loadend', function() {
-    //   console.log(req.status);
-    //   console.log(req.statusText);
-    //   if (req.status === 200) {
-    //     console.log(req.response);
-    //   } else {
-    //     // console.error(req.status+' '+req.statusText);
-    //     alert("エラーが発生しました。管理者（柳）にご連絡ください。");
-    //   }
-    // });
+    req.addEventListener('loadend', function() {
+        if (req.status === 200) {
+            console.log(req.response);
+        } else {
+            alert("エラーが発生しました。「「「「!!!!!!発生時刻!!!!!!」」」」を添えて管理者（大木）にご連絡ください。よろしくお願いいたします");
+        }
+    });
 
     req.send(thanksPostData);
-    req.abort();
     document.getElementById('_chatText').value="";
- };
+};
