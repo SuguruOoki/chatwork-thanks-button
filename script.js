@@ -14,8 +14,25 @@ thanksbutton.style.background="#5cb85c";
 thanksbutton.innerHTML = "ありがとう!";
 insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.lastChild);
 
-// TODO サーバーからエラーレスポンスが返ってきたら、管理者（柳）にご連絡くださいとアラートを表示する
 
+function notificate(title,message_contents) {
+    if(window.Notification != null) {
+        // Notificationを許可するかどうかを問い合わせる
+        Notification.requestPermission(function(permission){
+            // 許可されなかったら何もしない
+            if(permission !== "granted"){
+                return;
+            }
+            // タイトルと本文、アイコンを表示
+            var options = {};
+            options.icon = '';
+            options.body = message_contents;
+            new Notification(title, options);
+        });
+    }
+}
+
+// TODO サーバーからエラーレスポンスが返ってきたら、管理者（柳）にご連絡くださいとアラートを表示する
 thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
@@ -29,8 +46,7 @@ thanksbutton.onclick = function() {
     var target = '';
 
     if (sendText === '') {
-        alert('何かしら入力をお願いします・・・(ツラミ)');
-        exit();
+        notificate('入力不足！','何かしら入力をお願いします！');
     }
 
     // 送信先(To:)のユーザIDを取得
@@ -58,8 +74,7 @@ thanksbutton.onclick = function() {
         //     response_target[jj] = response_target[jj].slice(8);
         // }
     } else {
-        alert('誰にありがとうを伝えたいですか？');
-        exit();
+        notificate('入力不足！','誰にありがとうを伝えたいですか？');
     }
 
     // TODO: 複数でのToや返信の送信時の対応が必要
@@ -80,10 +95,11 @@ thanksbutton.onclick = function() {
         if (req.status === 200) {
             console.log(req.response);
         } else {
-            alert("エラーが発生しました。「「「「!!!!!!発生時刻!!!!!!」」」」を添えて管理者（大木）にご連絡ください。よろしくお願いいたします");
+            notificate('エラー！','正常に送信できませんでした！')
         }
     });
 
     req.send(thanksPostData);
     document.getElementById('_chatText').value="";
+    notificate('送信成功！','ありがとうを送りました！');
 };
