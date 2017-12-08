@@ -27,7 +27,8 @@ function notificate(title,message_contents) {
             var options = {};
             options.icon = '';
             options.body = message_contents;
-            new Notification(title, options);
+            var notification = new Notification(title, options);
+            setTimeout(notification.close.bind(notification), 2000);
         });
     }
 }
@@ -36,7 +37,7 @@ function notificate(title,message_contents) {
 thanksbutton.onclick = function() {
     var sendText = document.getElementById('_chatText').value;
     var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
-    var url = 'http://127.0.0.1:12390/thanks/new';
+    var url = 'http://104.199.162.8:12390/thanks/new';
     var method = 'POST';
 
     // TODO: 複数送信時にはこの辺りの初期化を変更する
