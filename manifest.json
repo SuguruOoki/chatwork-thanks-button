@@ -4,13 +4,16 @@
   "short_name": "ChatWork ありがとうボタン",
   "description": "ChatWork にthank youボタンをつけます。Add a thanks button to ChatWork.",
   "version" : "1.01",
+  "permissions": [
+      "notifications"
+  ],
   "icons": {
   },
   "homepage_url": "https://github.com/SuguruOoki/chatwork-thanks-button",
   "content_scripts":[
     {
       "matches" : [ "https://kcw.kddi.ne.jp/*"],
-      "js": ["script.js"],
+      "js": ["iziToast/dist/js/iziToast.js","script.js"],
       "run_at" : "document_end"
     }
   ]

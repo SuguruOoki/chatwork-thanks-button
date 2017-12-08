@@ -47,6 +47,7 @@ thanksbutton.onclick = function() {
 
     if (sendText === '') {
         notificate('入力不足！','何かしら入力をお願いします！');
+        return;
     }
 
     // 送信先(To:)のユーザIDを取得
@@ -75,6 +76,7 @@ thanksbutton.onclick = function() {
         // }
     } else {
         notificate('入力不足！','誰にありがとうを伝えたいですか？');
+        return;
     }
 
     // TODO: 複数でのToや返信の送信時の対応が必要
@@ -93,13 +95,12 @@ thanksbutton.onclick = function() {
     // TODO: この辺りはサーバーのレスポンスによって対応を変える時の処理。2017/12/06 現在はまだ未完成。
     req.addEventListener('loadend', function() {
         if (req.status === 200) {
-            console.log(req.response);
+            notificate('送信成功！','ありがとうを送りました！');
+            document.getElementById('_chatText').value="";
         } else {
-            notificate('エラー！','正常に送信できませんでした！')
+            notificate('エラー！','正常に送信できませんでした！');
+            return;
         }
     });
-
     req.send(thanksPostData);
-    document.getElementById('_chatText').value="";
-    notificate('送信成功！','ありがとうを送りました！');
 };
