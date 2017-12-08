@@ -3,7 +3,7 @@
   "name": "ChatWork ありがとうボタン(ChatWork Thanks Button)",
   "short_name": "ChatWork ありがとうボタン",
   "description": "ChatWork にthank youボタンをつけます。Add a thanks button to ChatWork.",
-  "version" : "1.01",
+  "version" : "1.02",
   "permissions": [
       "notifications"
   ],
@@ -13,7 +13,7 @@
   "content_scripts":[
     {
       "matches" : [ "https://kcw.kddi.ne.jp/*"],
-      "js": ["iziToast/dist/js/iziToast.js","script.js"],
+      "js": ["script.js"],
       "run_at" : "document_end"
     }
   ]
