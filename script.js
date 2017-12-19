@@ -56,11 +56,6 @@ thanksbutton.onclick = function() {
     var response_target = '';
     var target = '';
 
-    if (sendText === '') {
-        notificate('入力不足！','何かしら入力をお願いします！');
-        return;
-    }
-
     // 送信先(To:)のユーザIDを取得
     // 現在は一つ目のみを検出
     // TODO: 複数送信時の対応が必要
@@ -86,8 +81,13 @@ thanksbutton.onclick = function() {
         sendText = sendText.match(/\さん(.+)?/s)[1];
     }
 
-    if (sendText === '↵') {
+    if (sendText === '↵'|| sendText === '\n') {
         sendText = '';
+    }
+
+    if (sendText === '') {
+        notificate('入力不足！','何かしらメッセージの入力をお願いします！');
+        return;
     }
 
     var sendConfirm = confirmOnClick();

@@ -3,7 +3,7 @@
   "name": "ChatWork ありがとうボタン(ChatWork Thanks Button)",
   "short_name": "ChatWork ありがとうボタン",
   "description": "ChatWork にthank youボタンをつけます。Add a thanks button to ChatWork.",
-  "version" : "1.6",
+  "version" : "1.7",
   "permissions": [
       "notifications"
   ],
