@@ -15,7 +15,6 @@ insertClass.parentNode.insertBefore(thanksbutton, insertClass.parentNode.lastChi
 
 
 function confirmOnClick() {
-    var txt;
     var r = confirm("ありがとうを送信してもよろしいですか？");
     if (r == true) {
         return true;
