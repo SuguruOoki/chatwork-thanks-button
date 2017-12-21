@@ -1,0 +1,33 @@
+#_chatFilterList > li {
+  width: 25%;
+  min-width: 10px;
+}
+
+._cwABShowArea{
+  min-width: 315px;
+}
+
+._deleteIcon{
+  position: absolute;;
+  bottom: 2px;
+  right: 2px;
+}
+._deleteIcon:hover{
+  cursor: pointer;
+}
+
+
+#_pinList{
+  background-color: #faf7ef;
+}
+._pinItem{
+  position: relative;
+  background-color: #d7d9d3;
+  border-radius: 2px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+._pinItem:hover{
+  opacity: 0.8;
+}
