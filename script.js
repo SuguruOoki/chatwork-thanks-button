@@ -118,14 +118,12 @@ thanksbutton.onclick = function() {
 'use strict';
 
 function showTabContent() {
-  //$("#_categoryDisplay").css("display", "none");
   $("#_roomListItems").css("display", "none");
   $("#_hidenArea").prepend($("#_chatListEmptyArea"));
   $("#_thankList").css("display", "block");
 }
 
 function hideTabContent() {
-  //$("#_categoryDisplay").css("display", "block");
   $("#_roomListItems").css("display", "block");
   $("#_roomListArea").prepend($("#_chatListEmptyArea"));
   $("#_thankList").css("display", "none");
@@ -133,13 +131,13 @@ function hideTabContent() {
 
 function addTabButton() {
   // add tab item
-  var tabItem = $('<li class="_cwBBButton button"></li>');
+  var tabItem = $('<div class="_cwBBButton button"></li>');
   var tabItemContent = $('<span class="icoSizeLarge icoFontEmoticon"></span>');
   tabItem.attr('role', "menuitemradio");
   tabItem.attr('data-cwui-bb-idx', "3");
   tabItem.attr('aria-checked', "false");
   tabItem.append(tabItemContent);
-  $("#_chatFilterList").append(tabItem);
+  $("#_sideContentMenu__header").append(tabItem);
 
   // the tab content is hiding
   var state = false;
@@ -225,28 +223,28 @@ function isExist(array, elemnt) {
 // create thank item based on content
 function createthankItem(content) {
   var thankItem = $("<li class='_thankItem'></li>");
-  var deleteIcon = $('<span class="icoSizeLarge icoFontActionDelete _deleteIcon"></span>');
-
   thankItem.append(content);
-  thankItem.append(deleteIcon);
 
-  deleteIcon.click(function() {
-    // delete the thankned message
-    $(this).parent().remove();
-    console.log("delete clicked");
+  // TODO: 削除の方は今後この拡張が使われ続けるようになったら使うかもなので残しておく。
+  // その兆候がないようならば削除する。
 
-    // TODO:remove the data in data storage
-    // get the content to remove
-    //var sibData = $(this).siblings(".chatTimeLineMessageArea").prop("outerHTML");
-    var sibData = $(this).siblings("._chatTimeLineMessageBox").prop("outerHTML");
-
-    // get the stored list
-    var list = JSON.parse(localStorage.getItem("thank_list"));
-    removeElement(list, sibData)
-    // store back
-    localStorage.setItem("thank_list", JSON.stringify(list))
-
-  });
+  // var deleteIcon = $('<span class="icoSizeLarge icoFontActionDelete _deleteIcon"></span>');
+  // thankItem.append(deleteIcon);
+  // deleteIcon.click(function() {
+  //   // delete the thankned message
+  //   $(this).parent().remove();
+  //   console.log("delete clicked");
+  //   // get the content to remove
+  //   //var sibData = $(this).siblings(".chatTimeLineMessageArea").prop("outerHTML");
+  //   var sibData = $(this).siblings("._chatTimeLineMessageBox").prop("outerHTML");
+  //
+  //   // get the stored list
+  //   var list = JSON.parse(localStorage.getItem("thank_list"));
+  //   removeElement(list, sibData)
+  //   // store back
+  //   localStorage.setItem("thank_list", JSON.stringify(list))
+  //
+  // });
   return thankItem;
 }
 
@@ -267,71 +265,77 @@ function addthankButton(message) {
 
           // register click event for each button
           thankButton.click(function() {
-            // get the content of the message
-            //var messageParent = $(this).parent().parent().parent();
-            var messageParent = $(this).closest(".chatTimeLineMessage");
-            // var sender = $(this).parents("div").children(1).find('img');
+
+            const sendBtn = document.getElementById('_sendButton');
+            // To, Fromなどの取得
+            var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
             var target = $(this).parents("._message");
-            while(sender.find("._speaker").length === 0) {
-                target = sender.prev();
-            }
+            var url = 'https://127.0.0.1:12390/thanks/new';
+            // var url = 'https://dev-free01.next-engine.com:12390/thanks/new';
 
-            console.log(target);
-            target = sender.find("img").attr("data-aid");
-
-            //var content = messageParent.find(".chatTimeLineMessageArea");
-            var content = messageParent.find(".timelineMessage__userName");
-            var cloneContent = content.clone();
-
-            var rid = messageParent.attr("data-rid");
-            var mid = messageParent.attr("data-mid");
+            // thanksPinを作成するための問題
+            var cloneContent = target.clone();
+            console.log(cloneContent.find("._cwABShowArea.actionArea").remove());
+            var rid = target.attr("data-rid");
+            var mid = target.attr("data-mid");
+            var messageLink = "https://kcw.kddi.ne.jp/#!rid"+rid+"-"+mid;
             cloneContent.addClass("_roomLink");
             cloneContent.attr("data-rid", rid);
             cloneContent.attr("data-mid", mid);
-
             var contentInString = cloneContent.prop("outerHTML");
+
+            //メッセージ関連
+            var chatworkSendMessage = "";
+            var sendText = "ありがとうございます！";
+            var temporary = "";
+            var method = 'POST';
+
+            // 送り先の取得
+            while(target.find("._speaker").length === 0) {
+              target = target.prev();
+            }
+
+            target_name = target.find("._speakerName span").text();
+            target = target.find("img").attr("data-aid");
 
             // get local storage
             var list = JSON.parse(localStorage.getItem("thank_list"));
             if (!list) {
               list = [];
             }
+
             if (isExist(list, contentInString)) {
               alert("Already thank")
               return;
             }
+
             list.push(contentInString);
             localStorage.setItem("thank_list", JSON.stringify(list))
 
             // add new item to tab content
             var thankItem = createthankItem(cloneContent);
             $("#_thankList").append(thankItem);
-            // var req = new XMLHttpRequest();
-            // var senderId = document.getElementById('_myStatusIcon').childNodes[0].dataset.aid;
-            // var sendText = "ありがとうございます！";
-            // // var url = 'https://dev-free01.next-engine.com:12390/thanks/new';
-            // var url = 'https://127.0.0.1:12390/thanks/new';
-            // var method = 'POST';
-            // var thanksPostData = 'from_chatwork_id='+senderId+'&to_chatwork_id='+target+'&message='+sendText;
-            // var temporary = "";
-            //
-            // req.open(method, url, true);
-            // req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            // req.addEventListener('loadend', function() {
-            //     if (req.status === 200) {
-            //         temporary = document.getElementById('_chatText').value;
-            //         document.getElementById('_chatText').value = "";
-            //         document.getElementById('_chatText').value = sendText;
-            //         const sendBtn = document.getElementById('_sendButton');
-            //         notificate('送信成功！','ありがとうを送りました！');
-            //         sendBtn.click();
-            //         document.getElementById('_chatText').value = "";
-            //         document.getElementById('_chatText').value = temporary;
-            //     } else {
-            //         notificate('エラー！','正常に送信できませんでした！');
-            //         return;
-            //     }
-            // });
+
+            // メッセージ送信部分
+            var req = new XMLHttpRequest();
+            var thanksPostData = 'from_chatwork_id='+senderId+'&to_chatwork_id='+target+'&message='+sendText;
+            chatworkSendMessage = "[To:"+target+"] "+target_name+"さん\n"+"ありがとうございます！\n"+messageLink+"\n[ありがとう送信です！]";
+
+            req.open(method, url, true);
+            req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            req.addEventListener('loadend', function() {
+              if (req.status === 200) {
+                temporary = document.getElementById('_chatText').value; //一時的にメッセージを保存
+                document.getElementById('_chatText').value = ""; // 元のを消す
+                document.getElementById('_chatText').value = chatworkSendMessage; // ありがとうのメッセージを入力
+                notificate('送信成功！','ありがとうを送りました！');
+                sendBtn.click();//送る
+                document.getElementById('_chatText').value = temporary; // 元のメッセージを復元
+              } else {
+                notificate('エラー！','正常に送信できませんでした！');
+                return;
+              }
+            });
             // req.send(thanksPostData);
           });
         }
