@@ -359,4 +359,4 @@ function creatHidenArea() {
 creatHidenArea();
 addTabButton();
 addTabContent();
-addthankButton();;
+addthankButton();
