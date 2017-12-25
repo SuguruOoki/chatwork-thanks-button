@@ -80,7 +80,7 @@ thanksbutton.onclick = function() {
         sendText = sendText.match(/\さん(.+)?/s)[1];
     }
 
-    if (sendText === '↵'|| sendText === '\n') {
+    if (sendText === '↵') {
         sendText = '';
     }
 
@@ -276,12 +276,13 @@ function addthankButton(message) {
             // thanksPinを作成するための問題
             var cloneContent = target.clone();
             console.log(cloneContent.find("._cwABShowArea.actionArea").remove());
+            cloneContent.find("._cwABShowArea.actionArea").remove()
             var rid = target.attr("data-rid");
             var mid = target.attr("data-mid");
             var messageLink = "https://kcw.kddi.ne.jp/#!rid"+rid+"-"+mid;
-            cloneContent.addClass("_roomLink");
-            cloneContent.attr("data-rid", rid);
-            cloneContent.attr("data-mid", mid);
+            cloneContent.removeAttr("id")
+            cloneContent.removeAttr("data-rid");
+            cloneContent.removeAttr("data-mid");
             var contentInString = cloneContent.prop("outerHTML");
 
             //メッセージ関連
@@ -312,10 +313,6 @@ function addthankButton(message) {
             list.push(contentInString);
             localStorage.setItem("thank_list", JSON.stringify(list))
 
-            // add new item to tab content
-            var thankItem = createthankItem(cloneContent);
-            $("#_thankList").append(thankItem);
-
             // メッセージ送信部分
             var req = new XMLHttpRequest();
             var thanksPostData = 'from_chatwork_id='+senderId+'&to_chatwork_id='+target+'&message='+sendText;
@@ -330,13 +327,16 @@ function addthankButton(message) {
                 document.getElementById('_chatText').value = chatworkSendMessage; // ありがとうのメッセージを入力
                 notificate('送信成功！','ありがとうを送りました！');
                 sendBtn.click();//送る
+                // add new item to tab content
+                var thankItem = createthankItem(cloneContent);
+                $("#_thankList").append(thankItem);
                 document.getElementById('_chatText').value = temporary; // 元のメッセージを復元
               } else {
                 notificate('エラー！','正常に送信できませんでした！');
                 return;
               }
             });
-            // req.send(thanksPostData);
+            req.send(thanksPostData);
           });
         }
       });
